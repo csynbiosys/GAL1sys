@@ -36,9 +36,10 @@ plot(linspace(0,5*size(y,1),size(y,1)), ynormmean, 'sk')
 % Go to the root directory of the data, e.g. '../', or
 % modify the following variable.
 rootD = cd('/Users/tn/Documents/#Work_NCKU/Project_Menolascina_160712');
-exclude = 'GFquantification.mat'; %.mat file to exclude
+rootD = cd; % Matlab returns the previous directory when changing directory
+exclude = {'Data4Identification.mat','GFquantification.mat','GFnd003SingleCellDataWE.mat','GFnd007SingleCellDataWE.mat','GFnd265SingleCellDataInit.mat','GFnd272SingleCellData.mat', 'nd265_data_sh.mat', 'nd272_data_sh.mat'}; %.mat file to exclude
 dataD = dir(rootD);
-DataS = struct('experimentName',[],'time_min',[],'time_input',[],'NrCells',[],'input',[],'output',[],'output_std',[],'inputRawNormalised',[],'outputRawNormalised',[],'inputRawFlourescence',[],'outputRawFlourescence',[],'RFP',[]);
+DataS = struct('experimentName',[],'time_min',[],'time_input',[],'NrCells',[],'input',[],'output',[],'output_std',[],'output_pred',[],'inputRawNormalised',[],'outputRawNormalised',[],'inputRawFlourescence',[],'outputRawFlourescence',[],'RFP',[]);
 S = struct('description','','rootDir','','loadedDir','','Data',DataS);
 S(1).rootDir = rootD;
 if exist('description.txt','file')
@@ -70,7 +71,7 @@ for i = 3:size(dataD,1);
         % Load data from all .mat files in folder
         dataDM = dir(dataD(i).name);
         for k = 3:size(dataDM,1),
-            if ~dataDM(k).isdir && ~isempty(strfind(dataDM(k).name,'mat')) && isempty(strfind(dataDM(k).name,exclude)), %Only read .mat files
+            if ~dataDM(k).isdir && ~isempty(strfind(dataDM(k).name,'mat')) && isempty(strmatch(dataDM(k).name,exclude)), %Only read .mat files
                 S(1).Data(countExp).experimentName = dataDM(k).name;
                 DataLoaded = load([dataD(i).name '/' dataDM(k).name]);
                 fieldnamesDL = fieldnames(DataLoaded);
@@ -128,7 +129,7 @@ for i = 3:size(dataD,1);
         end
     end
 end
-clear i k l rootD fileID fieldnamesDL DataS dataDM dataD DataLoaded countExp T Temp
+clear i k l rootD fileID fieldnamesDL DataS dataDM dataD DataLoaded countExp T Temp exclude
 
 %% Log_Menolascina_data.m 160713-4. Listing of loaded data
 % Assume that S containing all data exist
@@ -148,17 +149,17 @@ for i = 1:size(S.Data,2),
         xlabel('Time (min)')
         % Find the index at which the initial Galactose period ends
         if ~isempty(S.Data(i).input),
-            plot(S.Data(i).time_input,S.Data(i).input,'b');
-            ind = find(S.Data(i).input < 0.9*S.Data(i).input(1));
+            plot(S.Data(i).time_input,S.Data(i).input,'r');
+            ind = find(S.Data(i).input < 0.9*S.Data(i).input(1)) - 1;
             tGalend = floor(S.Data(i).time_input(ind(1)));
-            plot([tGalend, tGalend],[max(S.Data(i).input), min(S.Data(i).input)], 'ko')
+            plot([tGalend, tGalend],[max(S.Data(i).input), min(S.Data(i).input)], 'ro')
         end
 
         % Calculate the mean over all cells for each timepoint
         ymean = meanNaN(S.Data(i).outputRawFlourescence,2);
 
         % Calculate the mean over the Galactose period
-        ymeanGal = meanNaN(ymean(1:tGalend/5))
+        ymeanGal = meanNaN(ymean(1:floor(tGalend/5)))
 
         % Normalise the arbitrary florescence readings such that the mean of mean
         % of the initial Galactose period is defind as 1
@@ -166,10 +167,15 @@ for i = 1:size(S.Data,2),
         S.Data(i).output = ymean./ymeanGal;
 
         plot(S.Data(i).time_min, S.Data(i).outputRawNormalised)
-        plot(S.Data(i).time_min, S.Data(i).output, 'sk')
+        plot(S.Data(i).time_min, S.Data(i).output, 'sg')
+        
+        % Calculate the std over all cells for each timeperiod
+        S.Data(i).output_std = std(S.Data(i).outputRawNormalised,0,2,'omitnan');
     end
 
 end
+
+save Data_Menolascina_yeast_160718.mat S
 
 %% Log_Menolascina_data.m 160713-6. Test if the input is constant between samples
 
@@ -195,4 +201,47 @@ end
 
 %% Log_Menolascina_data.m 160718-1. Plotting of one data set
 % Assume that S containing all data exist
+
+plotCells = false; % Plot the output trajectory of every cell
+plotErr = true; % Plot the errorbars as a shaded area 
+
+S
+S.loadedDir
+hind = 0; h =[]; hlabel = {};
+for i = 1:size(S.Data,2),
+    S.Data(i)
+    figure(i), hold on
+    xlabel('Time (min)')
+    % Find the index at which the initial Galactose period ends
+    if ~isempty(S.Data(i).input),
+        hind = hind + 1; hlabel{hind} = 'Input';
+        h(hind) = plot(S.Data(i).time_input,S.Data(i).input,'r');
+        ind = find(S.Data(i).input < 0.9*S.Data(i).input(1)) - 1;
+        tGalend = floor(S.Data(i).time_input(ind(1)));
+        plot([tGalend, tGalend],[max(S.Data(i).input), min(S.Data(i).input)], 'ro')
+    end
+    if plotErr && ~isempty(S.Data(i).output) && ~isempty(S.Data(i).output_std),
+        %hind = hind + 1; hlabel{hind} = 'Output';
+        %shadedErrorBar(S.Data(i).time_min',S.Data(i).output',S.Data(i).output_std','g'); % Standard deviation
+        shadedErrorBar(S.Data(i).time_min',S.Data(i).output',1.96.*S.Data(i).output_std','g'); % Confidence interval 95%
+    end
+    if ~isempty(S.Data(i).inputRawNormalised),
+        hind = hind + 1; hlabel{hind} = 'Input Raw';
+        h(hind) = plot(S.Data(i).time_min,S.Data(i).inputRawNormalised,'y');
+    end    
+    if plotCells && ~isempty(S.Data(i).outputRawNormalised),
+        %hind = hind + 1; hlabel{hind} = 'Output Raw';
+        %h(hind) = 
+        plot(S.Data(i).time_min,S.Data(i).outputRawNormalised);
+    end    
+    if ~isempty(S.Data(i).outputRawNormalised),
+        hind = hind + 1; hlabel{hind} = 'Output Median';
+        % Calculate the median over all cells for each timeperiod
+        h(hind) = plot(S.Data(i).time_min, median(S.Data(i).outputRawNormalised,2,'omitnan'), '--g');
+    end
+    if ~isempty(S.Data(i).output),
+        hind = hind + 1; hlabel{hind} = 'Output';
+        h(hind) = plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',1);
+    end
+end
 
