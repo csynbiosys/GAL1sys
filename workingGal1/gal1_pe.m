@@ -28,27 +28,27 @@ inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.3594
 
 gal1_loading
 
- inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
- for iexp=1:inputs.exps.n_exp   
-     inputs.exps.exp_y0{iexp}=zeros(1,inputs.model.n_st);  %Initial conditions for each experiment          
-     inputs.exps.t_f{iexp}=1200;                            %Experiments duration
-
-    % OBSEVABLES DEFINITION  
-     inputs.exps.n_obs{iexp}=1;                            % Number of observed quantities per experiment  
-     inputs.exps.obs_names{iexp}=char('GFP');      % Name of the observed quantities per experiment    
-     inputs.exps.obs{iexp}=char('GFP=Gal1');   % Observation function
- end 
- 
- inputs.exps.u_interp{1}='sustained';                  %Stimuli definition for experiment 1:
-                                                       %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down' 
- inputs.exps.t_con{1}=[0 1000];                         % Input swithching times: Initial and final time    
- inputs.exps.u{1}=[1];                                 % Values of the inputs 
- 
- inputs.exps.u_interp{2}='pulse-down';                 %Stimuli definition for experiment 2
- inputs.exps.n_pulses{2}=25;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
- inputs.exps.u_min{2}=0;
- inputs.exps.u_max{2}=1;        %Minimum and maximum value for the input
- inputs.exps.t_con{2}=[0 linspace(50,1200,50)];                       %Times of switching: Initial time, Intermediate times, Final time
+%  inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
+%  for iexp=1:inputs.exps.n_exp   
+%      inputs.exps.exp_y0{iexp}=zeros(1,inputs.model.n_st);  %Initial conditions for each experiment          
+%      inputs.exps.t_f{iexp}=1200;                            %Experiments duration
+% 
+%     % OBSEVABLES DEFINITION  
+%      inputs.exps.n_obs{iexp}=1;                            % Number of observed quantities per experiment  
+%      inputs.exps.obs_names{iexp}=char('GFP');      % Name of the observed quantities per experiment    
+%      inputs.exps.obs{iexp}=char('GFP=Gal1');   % Observation function
+%  end 
+%  
+%  inputs.exps.u_interp{1}='sustained';                  %Stimuli definition for experiment 1:
+%                                                        %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down' 
+%  inputs.exps.t_con{1}=[0 1000];                         % Input swithching times: Initial and final time    
+%  inputs.exps.u{1}=[1];                                 % Values of the inputs 
+%  
+%  inputs.exps.u_interp{2}='pulse-down';                 %Stimuli definition for experiment 2
+%  inputs.exps.n_pulses{2}=25;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
+%  inputs.exps.u_min{2}=0;
+%  inputs.exps.u_max{2}=1;        %Minimum and maximum value for the input
+%  inputs.exps.t_con{2}=[0 linspace(50,1200,50)];                       %Times of switching: Initial time, Intermediate times, Final time
                   
  
 inputs.PEsol.id_global_theta='all';                     %  'all'|User selected 

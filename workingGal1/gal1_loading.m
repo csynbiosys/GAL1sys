@@ -13,7 +13,7 @@ for iexp=1:inputs.exps.n_exp
     inputs.exps.u_interp{iexp}='step';                  %Stimuli definition for experiment 1:
     %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down'
     inputs.exps.t_con{iexp}=[0 S.Data(iexp).time_input'];                         % Input swithching times: Initial and final time
-    inputs.exps.u{iexp}=ones(size(S.Data(iexp).time_input'));                                 % Values of the inputs
+    inputs.exps.u{iexp}= max(S.Data(iexp).input).*ones(size(S.Data(iexp).time_input'));                                 % Values of the inputs
     inputs.exps.exp_data{iexp}=S.Data(iexp).output;
     inputs.exps.error_data{iexp}=S.Data(iexp).output_std;    
 end
