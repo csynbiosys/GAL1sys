@@ -8,10 +8,13 @@ tu=0:5:(length(u)-1)*5;
 load par
 t0=0;
 tf=(length(gfp)-1).*5;
-y_0=0.6777;
+y_0=0.9;%1.3;
 ts=t0:5:tf;
 tu=ts;
-u=u>mean(u);%square(tu./100+1000)./2+0.5
+%u=square(tu./100+1000)./2+0.5
+%u=double(u>mean(u)).*2;%square(tu./100+1000)./2+0.5
+%u(1)=2;
+%u=ones(1,200);
 pend=zeros(1,length(ts)-1);
 [yteor,iflag]=gal1bbmodel(t0,tf,ts,y_0,par,u,pend,tu);
 
