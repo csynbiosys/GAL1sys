@@ -26,7 +26,7 @@ inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.3594
 % EXPERIMENTAL SCHEME RELATED DATA
 %==================================
 
-
+gal1_loading
 
  inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
  for iexp=1:inputs.exps.n_exp   
@@ -45,10 +45,10 @@ inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.3594
  inputs.exps.u{1}=[1];                                 % Values of the inputs 
  
  inputs.exps.u_interp{2}='pulse-down';                 %Stimuli definition for experiment 2
- inputs.exps.n_pulses{2}=3;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
+ inputs.exps.n_pulses{2}=25;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
  inputs.exps.u_min{2}=0;
  inputs.exps.u_max{2}=1;        %Minimum and maximum value for the input
- inputs.exps.t_con{2}=[0 linspace(50,1200,6)];                       %Times of switching: Initial time, Intermediate times, Final time
+ inputs.exps.t_con{2}=[0 linspace(50,1200,50)];                       %Times of switching: Initial time, Intermediate times, Final time
                   
  
 inputs.PEsol.id_global_theta='all';                     %  'all'|User selected 
@@ -58,4 +58,22 @@ inputs.PEsol.global_theta_min=0.2.*inputs.model.par;%(1/100).*[7.5038 0.6801 1.4
                                  %2.5356 1.4420 4.8600 1.2 9.4440 0.5 0.4364 7.3021 4.5703 1.0];   % Minimum allowed values for the parameters
 inputs.PEsol.global_theta_guess=inputs.model.par;      % [] Initial guess
                             
+                             
+% GLOBAL INITIAL CONDITIONS
+%inputs.PEsol.id_global_theta_y0='none';               % [] 'all'|User selected| 'none' (default)
+% inputs.PEsol.global_theta_y0_max=[];                % Maximum allowed values for the initial conditions
+% inputs.PEsol.global_theta_y0_min=[];                % Minimum allowed values for the initial conditions
+% inputs.PEsol.global_theta_y0_guess=[];              % [] Initial guess
+
+% LOCAL UNKNOWNS (DIFFERENT VALUES FOR DIFFERENT EXPERIMENTS)
+
+%inputs.PEsol.id_local_theta{1}='none';                % [] 'all'|User selected| 'none' (default)
+% inputs.PEsol.local_theta_max{iexp}=[];              % Maximum allowed values for the paramters
+% inputs.PEsol.local_theta_min{iexp}=[];              % Minimum allowed values for the parameters
+% inputs.PEsol.local_theta_guess{iexp}=[];            % [] Initial guess
+%inputs.PEsol.id_local_theta_y0{1}='none';             % [] 'all'|User selected| 'none' (default)
+% inputs.PEsol.local_theta_y0_max{iexp}=[];           % Maximum allowed values for the initial conditions
+% inputs.PEsol.local_theta_y0_min{iexp}=[];           % Minimum allowed values for the initial conditions
+% inputs.PEsol.local_theta_y0_guess{iexp}=[];         % [] Initial guess
+
 inputs.rank.gr_samples = 100;
