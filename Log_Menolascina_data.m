@@ -175,7 +175,7 @@ for i = 1:size(S.Data,2),
 
 end
 
-save Data_Menolascina_yeast_160718.mat S
+%save Data_Menolascina_yeast_160718.mat S
 
 %% Log_Menolascina_data.m 160713-6. Test if the input is constant between samples
 
