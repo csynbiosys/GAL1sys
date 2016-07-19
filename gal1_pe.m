@@ -26,7 +26,7 @@ inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.3594
 % EXPERIMENTAL SCHEME RELATED DATA
 %==================================
 
-
+gal1_loading
 
  inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
  for iexp=1:inputs.exps.n_exp   
