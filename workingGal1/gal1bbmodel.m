@@ -7,7 +7,7 @@ function [yteor,iflag]=gal1bbmodel(t0,tf,ts,y_0,par,u,pend,tu,iexp)
         yteor(1,:)=y_0;
         i_int=2;
     else
-    i_int=1;
+        i_int=1;
     end
     i_con=1;
     % INTEGRATION LOOP 
