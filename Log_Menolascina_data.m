@@ -72,23 +72,26 @@ for i = 3:size(dataD,1);
         dataDM = dir(dataD(i).name);
         for k = 3:size(dataDM,1),
             if ~dataDM(k).isdir && ~isempty(strfind(dataDM(k).name,'mat')) && isempty(strmatch(dataDM(k).name,exclude)), %Only read .mat files
-                if isempty(strmatch(dataDM(k).name,{S(1).Data(:).experimentName}))
+                if ~isempty(S(1).Data(1).experimentName) && ~isempty(strmatch(dataDM(k).name,{S(1).Data(:).experimentName}))
                     % Checks if a file with identical name has been read
                     % before
-                    warning(['File with identical name ' dataDM(k).name ' has been read previously.'])
+                    warning([num2str(k) ' File with identical name ' dataDM(k).name ' has been read previously.'])
                 end
                 % Checks if an experiment with the same number in the
                 % file name has been read before. If it has, then the
                 % info is added to that entry.
                 for j = 1:numel(S(1).Data),
-                    if strcmp(S(1).Data(j).experimentName(end-2:end), dataDM(k).name(end-6:end-4)),
+                    if ~isempty(S(1).Data(j).experimentName) && strcmp(S(1).Data(j).experimentName(end-2:end), dataDM(k).name(end-6:end-4)),
                         % If the last three letters are the same then the
                         % number is the same.
                         countExp = j;
-                        
-                S(1).Data(countExp).experimentName = dataDM(k).name(1:end-4);
+                        break
+                    end
+                end
+                % Adds data to the Cell with number countExp        
                 DataLoaded = load([dataD(i).name '/' dataDM(k).name]);
                 fieldnamesDL = fieldnames(DataLoaded);
+                allIdentical = true;
                 for l = 1:numel(fieldnamesDL),
                     switch (fieldnamesDL{l}),
                         case 'u'
@@ -99,6 +102,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -111,6 +115,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -123,6 +128,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -135,6 +141,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -147,6 +154,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -159,6 +167,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -171,6 +180,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -183,6 +193,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -195,6 +206,7 @@ for i = 3:size(dataD,1);
                                 if differ < tol,
                                     % All fine
                                 else
+                                    allIdentical = false;
                                     warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
                                 end
                             end
@@ -227,7 +239,12 @@ for i = 3:size(dataD,1);
                     if S(1).Data(countExp).NrCells == 1,
                         S(1).Data(countExp).NrCells = []; %Leave empty to mark that a mean value is used
                     end
-                end                    
+                end
+                if allIdentical,
+                    S(1).Data(countExp).experimentName = dataDM(k).name(1:end-4); %Replaces old experimentName if one with the same number is found
+                else
+                    error('At least one confliciting variable detected.')
+                end
                 countExp = numel(S(1).Data) +1;
             end
         end
