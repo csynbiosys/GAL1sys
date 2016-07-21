@@ -17,4 +17,5 @@ for iexp=1:inputs.exps.n_exp
     inputs.exps.exp_data{iexp}=S.Data(iexp).output;
     inputs.exps.error_data{iexp}=S.Data(iexp).output_std;
     inputs.exps.t_s{iexp}=S.Data(iexp).time_min;
+    inputs.exps.n_steps{iexp}=numel(inputs.exps.u{iexp});
 end
