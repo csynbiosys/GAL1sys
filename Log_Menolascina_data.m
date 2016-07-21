@@ -33,7 +33,7 @@ plot(linspace(0,5*size(y,1),size(y,1)), ynormmean, 'sk')
 
 %% Log_Menolascina_data.m 160713-3. Automatic loading of multiple data files
 
-% Go to the root directory of the data, e.g. '../', or
+% Go to the root directory of the data, e.g. './', or
 % modify the following variable.
 rootD = cd('/Users/tn/Documents/#Work_NCKU/Project_Menolascina_160712');
 rootD = cd; % Matlab returns the previous directory when changing directory
@@ -72,29 +72,133 @@ for i = 3:size(dataD,1);
         dataDM = dir(dataD(i).name);
         for k = 3:size(dataDM,1),
             if ~dataDM(k).isdir && ~isempty(strfind(dataDM(k).name,'mat')) && isempty(strmatch(dataDM(k).name,exclude)), %Only read .mat files
-                S(1).Data(countExp).experimentName = dataDM(k).name;
+                if isempty(strmatch(dataDM(k).name,{S(1).Data(:).experimentName}))
+                    % Checks if a file with identical name has been read
+                    % before
+                    warning(['File with identical name ' dataDM(k).name ' has been read previously.'])
+                end
+                % Checks if an experiment with the same number in the
+                % file name has been read before. If it has, then the
+                % info is added to that entry.
+                for j = 1:numel(S(1).Data),
+                    if strcmp(S(1).Data(j).experimentName(end-2:end), dataDM(k).name(end-6:end-4)),
+                        % If the last three letters are the same then the
+                        % number is the same.
+                        countExp = j;
+                        
+                S(1).Data(countExp).experimentName = dataDM(k).name(1:end-4);
                 DataLoaded = load([dataD(i).name '/' dataDM(k).name]);
                 fieldnamesDL = fieldnames(DataLoaded);
                 for l = 1:numel(fieldnamesDL),
                     switch (fieldnamesDL{l}),
                         case 'u'
-                            S(1).Data(countExp).input = DataLoaded.u';
+                            if isempty(S(1).Data(countExp).input),
+                                S(1).Data(countExp).input = DataLoaded.u';
+                            else
+                                differ = norm(S(1).Data(countExp).input - DataLoaded.u');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                         case 'y'
-                            S(1).Data(countExp).outputRawFlourescence = DataLoaded.y;
+                            if isempty(S(1).Data(countExp).outputRawFlourescence),
+                                S(1).Data(countExp).outputRawFlourescence = DataLoaded.y;
+                            else
+                                differ = norm(S(1).Data(countExp).outputRawFlourescence - DataLoaded.y);
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                         case 'input'
-                            S(1).Data(countExp).inputRawNormalised = DataLoaded.input';
+                            if isempty(S(1).Data(countExp).inputRawNormalised),
+                                S(1).Data(countExp).inputRawNormalised = DataLoaded.input';
+                            else
+                                differ = norm(S(1).Data(countExp).inputRawNormalised - DataLoaded.input');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                         case 'plantinput'
-                            S(1).Data(countExp).inputRawFlourescence = DataLoaded.plantinput';
+                            if isempty(S(1).Data(countExp).inputRawFlourescence),
+                                S(1).Data(countExp).inputRawFlourescence = DataLoaded.plantinput';
+                            else
+                                differ = norm(S(1).Data(countExp).inputRawFlourescence - DataLoaded.plantinput');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                         case 'IN'
-                            S(1).Data(countExp).input = DataLoaded.IN';
+                            if isempty(S(1).Data(countExp).input),
+                                S(1).Data(countExp).input = DataLoaded.IN';
+                            else
+                                differ = norm(S(1).Data(countExp).input - DataLoaded.IN');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                             
                         case 'OUT'
-                            S(1).Data(countExp).output = DataLoaded.OUT';
+                            if isempty(S(1).Data(countExp).output),
+                                S(1).Data(countExp).output = DataLoaded.OUT';
+                            else
+                                differ = norm(S(1).Data(countExp).output - DataLoaded.OUT');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                         case 'plantstate'
-                            S(1).Data(countExp).outputRawFlourescence = DataLoaded.plantstate';
+                            if isempty(S(1).Data(countExp).outputRawFlourescence),
+                                S(1).Data(countExp).outputRawFlourescence = DataLoaded.plantstate';
+                            else
+                                differ = norm(S(1).Data(countExp).outputRawFlourescence - DataLoaded.plantstate');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                         case 'RFP'
-                            S(1).Data(countExp).RFP = DataLoaded.RFP';
+                            if isempty(S(1).Data(countExp).RFP),
+                                S(1).Data(countExp).RFP = DataLoaded.RFP';
+                            else
+                                differ = norm(S(1).Data(countExp).RFP - DataLoaded.RFP');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                         case 'err'
-                            S(1).Data(countExp).output_std = DataLoaded.err';
+                            if isempty(S(1).Data(countExp).output_std),
+                                S(1).Data(countExp).output_std = DataLoaded.err';
+                            else
+                                differ = norm(S(1).Data(countExp).output_std - DataLoaded.err');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
                     end
                 end
                 if ~isempty(S(1).Data(countExp).outputRawFlourescence),
@@ -124,7 +228,7 @@ for i = 3:size(dataD,1);
                         S(1).Data(countExp).NrCells = []; %Leave empty to mark that a mean value is used
                     end
                 end                    
-                countExp = countExp +1;
+                countExp = numel(S(1).Data) +1;
             end
         end
     end
@@ -201,6 +305,8 @@ end
 
 %% Log_Menolascina_data.m 160718-1. Plotting of one data set
 % Assume that S containing all data exist
+%load Data_Menolascina_yeast_160718.mat
+
 
 plotCells = false; % Plot the output trajectory of every cell
 plotErr = true; % Plot the errorbars as a shaded area 
