@@ -38,9 +38,8 @@ function [yteor,iflag]=gal1bbmodel(t0,tf,ts,y_0,par,u,pend,tu,iexp)
         %    [tout  inputs.exps.t_con{iexp}(i_con)]
 
         if (size(u,2)>1)               
-            if (tout>=tu(i_con+1)) && ((i_con+1)<=size(u,2)) %FM21072016 it was ((i_con+1)<size(u,2)+1)
+            if (tout>=tu(i_con+1)) && ((i_con+1)<size(u,2)+1)
                 i_con=i_con+1;
-                tout %FM21072016 REMOVE
             end 
         end
         t_old=tu(i_con); 

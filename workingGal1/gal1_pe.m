@@ -28,6 +28,31 @@ inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.3594
 
 gal1_loading
 
+% <<<<<<< HEAD
+% %  inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
+% %  for iexp=1:inputs.exps.n_exp   
+% %      inputs.exps.exp_y0{iexp}=zeros(1,inputs.model.n_st);  %Initial conditions for each experiment          
+% %      inputs.exps.t_f{iexp}=1200;                            %Experiments duration
+% % 
+% %     % OBSEVABLES DEFINITION  
+% %      inputs.exps.n_obs{iexp}=1;                            % Number of observed quantities per experiment  
+% %      inputs.exps.obs_names{iexp}=char('GFP');      % Name of the observed quantities per experiment    
+% %      inputs.exps.obs{iexp}=char('GFP=Gal1');   % Observation function
+% %  end 
+% %  
+% %  inputs.exps.u_interp{1}='sustained';                  %Stimuli definition for experiment 1:
+% %                                                        %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down' 
+% %  inputs.exps.t_con{1}=[0 1000];                         % Input swithching times: Initial and final time    
+% %  inputs.exps.u{1}=[1];                                 % Values of the inputs 
+% %  
+% %  inputs.exps.u_interp{2}='pulse-down';                 %Stimuli definition for experiment 2
+% %  inputs.exps.n_pulses{2}=25;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
+% %  inputs.exps.u_min{2}=0;
+% %  inputs.exps.u_max{2}=1;        %Minimum and maximum value for the input
+% %  inputs.exps.t_con{2}=[0 linspace(50,1200,50)];                       %Times of switching: Initial time, Intermediate times, Final time
+% =======
+
+% 
 %  inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
 %  for iexp=1:inputs.exps.n_exp   
 %      inputs.exps.exp_y0{iexp}=zeros(1,inputs.model.n_st);  %Initial conditions for each experiment          
@@ -45,10 +70,11 @@ gal1_loading
 %  inputs.exps.u{1}=[1];                                 % Values of the inputs 
 %  
 %  inputs.exps.u_interp{2}='pulse-down';                 %Stimuli definition for experiment 2
-%  inputs.exps.n_pulses{2}=25;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
+%  inputs.exps.n_pulses{2}=3;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
 %  inputs.exps.u_min{2}=0;
 %  inputs.exps.u_max{2}=1;        %Minimum and maximum value for the input
-%  inputs.exps.t_con{2}=[0 linspace(50,1200,50)];                       %Times of switching: Initial time, Intermediate times, Final time
+%  inputs.exps.t_con{2}=[0 linspace(50,1200,6)];                       %Times of switching: Initial time, Intermediate times, Final time
+% % >>>>>>> parent of cf85d41... Solving the issue with vector dimensions
                   
  
 inputs.PEsol.id_global_theta='all';                     %  'all'|User selected 
@@ -60,22 +86,4 @@ inputs.PEsol.global_theta_guess=[1.7599e-03, 8.0089e-02, 2.2255e+00, 3.3595e+00,
 
 %inputs.model.par;      % [] Initial guess
                             
-                             
-% GLOBAL INITIAL CONDITIONS
-%inputs.PEsol.id_global_theta_y0='none';               % [] 'all'|User selected| 'none' (default)
-% inputs.PEsol.global_theta_y0_max=[];                % Maximum allowed values for the initial conditions
-% inputs.PEsol.global_theta_y0_min=[];                % Minimum allowed values for the initial conditions
-% inputs.PEsol.global_theta_y0_guess=[];              % [] Initial guess
-
-% LOCAL UNKNOWNS (DIFFERENT VALUES FOR DIFFERENT EXPERIMENTS)
-
-%inputs.PEsol.id_local_theta{1}='none';                % [] 'all'|User selected| 'none' (default)
-% inputs.PEsol.local_theta_max{iexp}=[];              % Maximum allowed values for the paramters
-% inputs.PEsol.local_theta_min{iexp}=[];              % Minimum allowed values for the parameters
-% inputs.PEsol.local_theta_guess{iexp}=[];            % [] Initial guess
-%inputs.PEsol.id_local_theta_y0{1}='none';             % [] 'all'|User selected| 'none' (default)
-% inputs.PEsol.local_theta_y0_max{iexp}=[];           % Maximum allowed values for the initial conditions
-% inputs.PEsol.local_theta_y0_min{iexp}=[];           % Minimum allowed values for the initial conditions
-% inputs.PEsol.local_theta_y0_guess{iexp}=[];         % [] Initial guess
-
 inputs.rank.gr_samples = 100;
