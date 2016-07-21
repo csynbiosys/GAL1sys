@@ -56,7 +56,9 @@ inputs.PEsol.global_theta_max=5.*inputs.model.par; %100.*[7.5038 0.6801 1.4992 1
                                  %2.5356 1.4420 4.8600 1.2 9.4440 0.5 0.4364 7.3021 4.5703 1.0];    % Maximum allowed values for the paramters
 inputs.PEsol.global_theta_min=0.2.*inputs.model.par;%(1/100).*[7.5038 0.6801 1.4992 10.0982 2.3422 7.2482 1.8981 1.2 3.8045 ...
                                  %2.5356 1.4420 4.8600 1.2 9.4440 0.5 0.4364 7.3021 4.5703 1.0];   % Minimum allowed values for the parameters
-inputs.PEsol.global_theta_guess=inputs.model.par;      % [] Initial guess
+inputs.PEsol.global_theta_guess=[1.7599e-03, 8.0089e-02, 2.2255e+00, 3.3595e+00, 1.0061e-02, 1.9086e+00, 7.2132e+01]; 
+
+%inputs.model.par;      % [] Initial guess
                             
                              
 % GLOBAL INITIAL CONDITIONS

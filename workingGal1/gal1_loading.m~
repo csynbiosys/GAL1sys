@@ -16,5 +16,5 @@ for iexp=1:inputs.exps.n_exp
     inputs.exps.u{iexp}= max(S.Data(iexp).input).*ones(size(S.Data(iexp).time_input'));                                 % Values of the inputs
     inputs.exps.exp_data{iexp}=S.Data(iexp).output;
     inputs.exps.error_data{iexp}=S.Data(iexp).output_std;
-    inputs.exps.t_s{iexp}=S.Data(iexp).time_min;
+    inputs.exps.t_s{iexp}=[0:5:(inputs.exps.t_f{iexp}-5)]
 end
