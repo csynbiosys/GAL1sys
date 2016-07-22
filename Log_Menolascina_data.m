@@ -81,14 +81,17 @@ for i = 3:size(dataD,1);
                 % file name has been read before. If it has, then the
                 % info is added to that entry.
                 for j = 1:numel(S(1).Data),
-                    if ~isempty(S(1).Data(j).experimentName) && strcmp(S(1).Data(j).experimentName(end-2:end), dataDM(k).name(end-6:end-4)),
-                        % If the last three letters are the same then the
+                    if ~isempty(S(1).Data(j).experimentName) && strcmp(lower(S(1).Data(j).experimentName(end-4:end)), lower(dataDM(k).name(end-8:end-4))),
+                        % If the last five letters are the same then the
                         % number is the same.
                         countExp = j;
                         break
                     end
                 end
                 % Adds data to the Cell with number countExp        
+                if numel(S(1).Data) < countExp,
+                    S(1).Data(countExp).experimentName = dataDM(k).name(1:end-4); %Initiates new matrix
+                end
                 DataLoaded = load([dataD(i).name '/' dataDM(k).name]);
                 fieldnamesDL = fieldnames(DataLoaded);
                 allIdentical = true;
@@ -211,11 +214,56 @@ for i = 3:size(dataD,1);
                                 end
                             end
                             
+                        case 'DATA'
+                            if isempty(S(1).Data(countExp).outputRawFlourescence),
+                                S(1).Data(countExp).outputRawFlourescence = DataLoaded.DATA;
+                            else
+                                differ = norm(S(1).Data(countExp).outputRawFlourescence - DataLoaded.DATA);
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    allIdentical = false;
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                            
+                        case 'ingresso'
+                            i,j,k,l
+                            S(1).Data
+                            countExp
+                            if isempty(S(1).Data(countExp).input),
+                            disp('hej')
+                                S(1).Data(countExp).input = DataLoaded.ingresso';
+                                if ~isempty(S(1).Data(countExp).input) && isempty(S(1).Data(countExp).time_input),
+                                    if ~isempty(S(1).Data(countExp).time_min),
+                                        if numel(S(1).Data(countExp).input) ~= numel(S(1).Data(countExp).time_min),
+                                            S(1).Data(countExp).time_input = linspace(0,5*size(S(1).Data(countExp).outputRawFlourescence,1),numel(S(1).Data(countExp).input))';
+                                        else
+                                            S(1).Data(countExp).time_input = S(1).Data(countExp).time_min;
+                                        end
+                                    end
+                                end
+                            else
+                            disp('hej2')
+                                differ = norm(S(1).Data(countExp).input - DataLoaded.ingresso');
+                                if differ < tol,
+                                    % All fine
+                                else
+                                    allIdentical = false;
+                                    warning(['File ' dataDM(k).name ' contains a variable that is different from an existing one in the experiment by ' num2str(differ)])
+                                end
+                            end
+                             
                     end
+                end
+                if allIdentical,
+                    S(1).Data(countExp).experimentName = dataDM(k).name(1:end-4); %Replaces old experimentName if one with the same number is found
+                else
+                    error('At least one confliciting variable detected.')
                 end
                 if ~isempty(S(1).Data(countExp).outputRawFlourescence),
                     S(1).Data(countExp).time_min = linspace(0,5*size(S(1).Data(countExp).outputRawFlourescence,1),size(S(1).Data(countExp).outputRawFlourescence,1))';
-                    if ~isempty(S(1).Data(countExp).input),
+                    if ~isempty(S(1).Data(countExp).input) && isempty(S(1).Data(countExp).time_input),
                         if numel(S(1).Data(countExp).input) ~= numel(S(1).Data(countExp).time_min),
                             S(1).Data(countExp).time_input = linspace(0,5*size(S(1).Data(countExp).outputRawFlourescence,1),5*60*size(S(1).Data(countExp).outputRawFlourescence,1))';
                         else
@@ -228,7 +276,7 @@ for i = 3:size(dataD,1);
                     end
                 else
                     S(1).Data(countExp).time_min = linspace(0,5*size(S(1).Data(countExp).output,1),size(S(1).Data(countExp).output,1))';
-                    if ~isempty(S(1).Data(countExp).input),
+                    if ~isempty(S(1).Data(countExp).input) && isempty(S(1).Data(countExp).time_input),
                         if numel(S(1).Data(countExp).input) ~= numel(S(1).Data(countExp).time_min),
                             S(1).Data(countExp).time_input = linspace(0,5*size(S(1).Data(countExp).output,1),5*60*size(S(1).Data(countExp).output,1))';
                         else
@@ -239,11 +287,6 @@ for i = 3:size(dataD,1);
                     if S(1).Data(countExp).NrCells == 1,
                         S(1).Data(countExp).NrCells = []; %Leave empty to mark that a mean value is used
                     end
-                end
-                if allIdentical,
-                    S(1).Data(countExp).experimentName = dataDM(k).name(1:end-4); %Replaces old experimentName if one with the same number is found
-                else
-                    error('At least one confliciting variable detected.')
                 end
                 countExp = numel(S(1).Data) +1;
             end
