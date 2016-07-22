@@ -20,12 +20,14 @@ function [yteor,iflag]=gal1bbmodel(t0,tf,ts,y_0,par,u,pend,tu,iexp)
 %     tu=[0 tu+double(int8(par(7)))]
 %     t_old=tu(1);
 %     u=[1 u];
+
     for i_out=1:size(vtout,2)-1 
         tin=vtout(i_out);
         tout=vtout(i_out+1);  
+        
 %         fprintf('Initial time: %5.2f --- Final time: %5.2f\n',tin, tout);
 %         u(:,i_con)
-        [t,yout] = ode15s(@odes_gal1,[tin tout],y_0,options,flag,par',u,pend,t_old, tu,i_con);
+        [t,yout] = ode15s(@odes_gal1bb,[tin tout],y_0,options,flag,par',u,pend,t_old, tu,i_con);
         % Keep values to next integration step
         y_0=yout(size(t,1),:);
 
