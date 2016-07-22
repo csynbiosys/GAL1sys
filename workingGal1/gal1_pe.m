@@ -26,62 +26,9 @@ inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.3594
 % EXPERIMENTAL SCHEME RELATED DATA
 %==================================
 
-gal1_loading
-
-% <<<<<<< HEAD
-% %  inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
-% %  for iexp=1:inputs.exps.n_exp   
-% %      inputs.exps.exp_y0{iexp}=zeros(1,inputs.model.n_st);  %Initial conditions for each experiment          
-% %      inputs.exps.t_f{iexp}=1200;                            %Experiments duration
-% % 
-% %     % OBSEVABLES DEFINITION  
-% %      inputs.exps.n_obs{iexp}=1;                            % Number of observed quantities per experiment  
-% %      inputs.exps.obs_names{iexp}=char('GFP');      % Name of the observed quantities per experiment    
-% %      inputs.exps.obs{iexp}=char('GFP=Gal1');   % Observation function
-% %  end 
-% %  
-% %  inputs.exps.u_interp{1}='sustained';                  %Stimuli definition for experiment 1:
-% %                                                        %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down' 
-% %  inputs.exps.t_con{1}=[0 1000];                         % Input swithching times: Initial and final time    
-% %  inputs.exps.u{1}=[1];                                 % Values of the inputs 
-% %  
-% %  inputs.exps.u_interp{2}='pulse-down';                 %Stimuli definition for experiment 2
-% %  inputs.exps.n_pulses{2}=25;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
-% %  inputs.exps.u_min{2}=0;
-% %  inputs.exps.u_max{2}=1;        %Minimum and maximum value for the input
-% %  inputs.exps.t_con{2}=[0 linspace(50,1200,50)];                       %Times of switching: Initial time, Intermediate times, Final time
-% =======
-
-% 
-%  inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
-%  for iexp=1:inputs.exps.n_exp   
-%      inputs.exps.exp_y0{iexp}=zeros(1,inputs.model.n_st);  %Initial conditions for each experiment          
-%      inputs.exps.t_f{iexp}=1200;                            %Experiments duration
-% 
-%     % OBSEVABLES DEFINITION  
-%      inputs.exps.n_obs{iexp}=1;                            % Number of observed quantities per experiment  
-%      inputs.exps.obs_names{iexp}=char('GFP');      % Name of the observed quantities per experiment    
-%      inputs.exps.obs{iexp}=char('GFP=Gal1');   % Observation function
-%  end 
-%  
-%  inputs.exps.u_interp{1}='sustained';                  %Stimuli definition for experiment 1:
-%                                                        %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down' 
-%  inputs.exps.t_con{1}=[0 1000];                         % Input swithching times: Initial and final time    
-%  inputs.exps.u{1}=[1];                                 % Values of the inputs 
-%  
-%  inputs.exps.u_interp{2}='pulse-down';                 %Stimuli definition for experiment 2
-%  inputs.exps.n_pulses{2}=3;                            %Number of pulses |-|_|-|_|-|_|-|_|-|_    
-%  inputs.exps.u_min{2}=0;
-%  inputs.exps.u_max{2}=1;        %Minimum and maximum value for the input
-<<<<<<< HEAD
-%  inputs.exps.t_con{2}=[0 linspace(50,1200,6)];                       %Times of switching: Initial time, Intermediate times, Final time
-% % >>>>>>> parent of cf85d41... Solving the issue with vector dimensions
-                  
-=======
-%  inputs.exps.t_con{2}=[0 linspace(50,1200,50)];                       %Times of switching: Initial time, Intermediate times, Final time
 load ./Data_Menolascina_yeast_160718.mat
 
-inputs.exps.n_exp=2;                                  %Number of experiments                                                                            
+inputs.exps.n_exp=1;                                  %Number of experiments                                                                            
 for iexp=1:inputs.exps.n_exp
     inputs.exps.exp_y0{iexp}=ones(1,inputs.model.n_st);  %Initial conditions for each experiment
     inputs.exps.t_f{iexp}=S.Data(iexp).time_min(end);                            %Experiments duration
@@ -100,7 +47,6 @@ for iexp=1:inputs.exps.n_exp
     inputs.exps.t_s{iexp}=S.Data(iexp).time_min';
     inputs.exps.n_steps{iexp}=numel(inputs.exps.u{iexp});
 end                  
->>>>>>> origin/master
  
 inputs.PEsol.id_global_theta=char('alpha','vv','K','D','delta');                     %  'all'|User selected 
 inputs.PEsol.global_theta_max=25*ones(1,5); %100.*[7.5038 0.6801 1.4992 10.0982 2.3422 7.2482 1.8981 1.2 3.8045 ...
@@ -116,10 +62,6 @@ inputs.PEsol.global_theta_guess=[0.000001000001316
 inputs.PEsol.global_theta_min=0.1*inputs.PEsol.global_theta_guess;
 inputs.PEsol.global_theta_max=1.1*inputs.PEsol.global_theta_guess;
 %inputs.model.par;      % [] Initial guess
-<<<<<<< HEAD
-                            
-inputs.rank.gr_samples = 100;
-=======
 
 %==================================
 % COST FUNCTION RELATED DATA
@@ -173,5 +115,3 @@ inputs.nlpsol.eSS.local.finish = 'fminsearch';
 %                                                       %                3 --> DE/rand-to-best/1/exp   
 %                                                       %                4 --> DE/best/2/exp          
 %                                                       %                5 --> DE/rand/2/exp           
- 
->>>>>>> origin/master
