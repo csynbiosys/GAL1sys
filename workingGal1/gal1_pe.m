@@ -11,27 +11,29 @@ inputs.pathd.short_name='gal1';                      % To identify figures and r
 
 inputs.model.input_model_type='blackboxmodel';                % Model introduction: 'charmodelC'|'c_model'|'charmodelM'|'matlabmodel'|'sbmlmodel'|                        
                                                            %                     'blackboxmodel'|'blackboxcost                             
-inputs.model.blackboxmodel_file='gal1bbmodel'; % File including the simulation of the given model
+inputs.model.blackboxmodel_file='gal1bbmodelF'; % File including the simulation of the given model
 inputs.model.n_st=1;
-inputs.model.n_par=7;
+inputs.model.n_par=8;
 inputs.model.n_stimulus=1;
 inputs.model.names_type='custom';
 
 inputs.model.st_names=char('Gal1');     % Names of the states
-inputs.model.par_names=char('alpha','vv','H','K','D','IC','delta');             % Names of the parameters defining parameter order
+inputs.model.par_names=char('alpha','vv','H','K','D','IC','delta','pfilter');             % Names of the parameters defining parameter order
 inputs.model.stimulus_names=char('galactose');
-inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.35948035905386,0.0100614569676223,1.90860267661432,72.1324389675838];
+inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.35948035905386,0.0100614569676223,1.90860267661432,72.1324389675838,10];
 
 %==================================
 % EXPERIMENTAL SCHEME RELATED DATA
 %==================================
 
-load ./Data_Menolascina_yeast_160718.mat
+load Data_Menolascina_yeast_160718.mat
 
-inputs.exps.n_exp=1;                                  %Number of experiments                                                                            
+inputs.exps.n_exp=5;                                  %Number of experiments                                                                            
 for iexp=1:inputs.exps.n_exp
+    index=iexp;
+    %index=4;
     inputs.exps.exp_y0{iexp}=ones(1,inputs.model.n_st);  %Initial conditions for each experiment
-    inputs.exps.t_f{iexp}=S.Data(iexp).time_min(end);                            %Experiments duration
+    inputs.exps.t_f{iexp}=S.Data(index).time_min(end);                            %Experiments duration
     
     % OBSEVABLES DEFINITION
     inputs.exps.n_obs{iexp}=1;                            % Number of observed quantities per experiment
@@ -40,28 +42,54 @@ for iexp=1:inputs.exps.n_exp
     
     inputs.exps.u_interp{iexp}='step';                  %Stimuli definition for experiment 1:
     %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down'
-    inputs.exps.t_con{iexp}=[0 S.Data(iexp).time_input'];                         % Input swithching times: Initial and final time
-    inputs.exps.u{iexp}= S.Data(iexp).input';                                 % Values of the inputs
-    inputs.exps.exp_data{iexp}=S.Data(iexp).output;
-    inputs.exps.error_data{iexp}=S.Data(iexp).output_std;
-    inputs.exps.t_s{iexp}=S.Data(iexp).time_min';
+    t_con{iexp}=[0 S.Data(index).time_input'];                         % Input swithching times: Initial and final time
+    u{iexp}= S.Data(index).input';                                 % Values of the inputs
+    inputs.exps.exp_data{iexp}=S.Data(index).output;
+    inputs.exps.error_data{iexp}=S.Data(index).output_std;
+    inputs.exps.t_s{iexp}=S.Data(index).time_min';
+    
+    
+    % TRANSFORM INPUT VECTORS FOR MINIMUM DIMENSIONS
+    i_con=1;
+    for i=1:numel(u{iexp})-1
+        if u{iexp}(i+1)~=u{iexp}(i)
+            i_con=[i_con i+1];
+        end
+    end    
+    inputs.exps.u{iexp}=u{iexp}(i_con);
+    inputs.exps.t_con{iexp}=[t_con{iexp}(i_con) t_con{iexp}(end)];
     inputs.exps.n_steps{iexp}=numel(inputs.exps.u{iexp});
+    i_con=[];
+%      figure
+%      plot(t_con{iexp}(1:end-1),u{iexp},'r')
+%      hold on
+%      stairs(inputs.exps.t_con{iexp}(1:end-1),inputs.exps.u{iexp},'b')
+     
 end                  
  
-inputs.PEsol.id_global_theta=char('alpha','vv','K','D','delta');                     %  'all'|User selected 
-inputs.PEsol.global_theta_max=25*ones(1,5); %100.*[7.5038 0.6801 1.4992 10.0982 2.3422 7.2482 1.8981 1.2 3.8045 ...
-                                 %2.5356 1.4420 4.8600 1.2 9.4440 0.5 0.4364 7.3021 4.5703 1.0];    % Maximum allowed values for the paramters
-inputs.PEsol.global_theta_min=1e-6*ones(1,5);%(1/100).*[7.5038 0.6801 1.4992 10.0982 2.3422 7.2482 1.8981 1.2 3.8045 ...
-                                 %2.5356 1.4420 4.8600 1.2 9.4440 0.5 0.4364 7.3021 4.5703 1.0];   % Minimum allowed values for the parameters
-inputs.PEsol.global_theta_guess=[0.000001000001316
-   0.700494596152119
-   1.291131863683036
-   0.004124545481924
-  22.979072707253621]'; 
 
-inputs.PEsol.global_theta_min=0.1*inputs.PEsol.global_theta_guess;
-inputs.PEsol.global_theta_max=1.1*inputs.PEsol.global_theta_guess;
-%inputs.model.par;      % [] Initial guess
+
+
+ inputs.PEsol.id_global_theta=char('alpha','vv','K','D','delta','pfilter');                    %  'all'|User selected 
+ inputs.PEsol.global_theta_max=[1e-4 0.01 0.25 0.01 25 40];
+ inputs.PEsol.global_theta_min=[1e-8*ones(1,4) 5 1];   % Minimum allowed values for the parameters
+%   inputs.PEsol.global_theta_guess=[ 
+%       3.75000000075784e-09
+%        0.00671302536054705
+%        0.00113424628516263
+%        0.00392299962038329
+%            25.000248018349]'; 
+%   inputs.PEsol.global_theta_max=2*inputs.PEsol.global_theta_guess;
+%   inputs.PEsol.global_theta_min=0.5*inputs.PEsol.global_theta_guess; 
+   
+%  for iexp=1:5
+%      inputs.PEsol.id_local_theta{iexp}=char('alpha','vv','K','D','delta');
+%      inputs.PEsol.local_theta_max{iexp}=[1e-4 0.1 0.25 0.1 25];
+%      inputs.PEsol.local_theta_min{iexp}=1e-8*ones(1,5);
+%  end
+% inputs.PEsol.global_theta_min=0.0*inputs.PEsol.global_theta_guess;
+% inputs.PEsol.global_theta_max=1.1*inputs.PEsol.global_theta_guess;
+% %inputs.model.par;      % [] Initial guess
 
 %==================================
 % COST FUNCTION RELATED DATA
@@ -95,9 +123,9 @@ inputs.nlpsol.nlpsolver='eSS';                        % [] NLP solver:
 %                                                       % OPT_solvers\eSS_**\ess_options.m
 %                                                       
                                                        
-inputs.nlpsol.eSS.log_var = 1:5;    %The number of the parameters
+inputs.nlpsol.eSS.log_var = 1:4;    %The number of the parameters
 inputs.nlpsol.eSS.maxeval = 100000;
-inputs.nlpsol.eSS.maxtime = 120;
+inputs.nlpsol.eSS.maxtime = 300;
 
 inputs.nlpsol.eSS.local.solver = 'lsqnonlin';
 inputs.nlpsol.eSS.local.finish = 'fminsearch';
