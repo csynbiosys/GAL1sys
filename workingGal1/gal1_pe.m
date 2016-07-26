@@ -18,7 +18,7 @@ inputs.model.n_stimulus=1;
 inputs.model.names_type='custom';
 
 inputs.model.st_names=char('Gal1');     % Names of the states
-inputs.model.par_names=char('alpha','vv','H','K','D','IC','delta','pfilter');             % Names of the parameters defining parameter order
+inputs.model.par_names=char('alpha','vv','H','K','D','IC','delta','delta2');             % Names of the parameters defining parameter order
 inputs.model.stimulus_names=char('galactose');
 inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.35948035905386,0.0100614569676223,1.90860267661432,72.1324389675838,10];
 
@@ -70,17 +70,19 @@ end
 
 
 
- inputs.PEsol.id_global_theta=char('alpha','vv','K','D','delta','pfilter');                    %  'all'|User selected 
- inputs.PEsol.global_theta_max=[1e-4 0.01 0.25 0.01 25 40];
- inputs.PEsol.global_theta_min=[1e-8*ones(1,4) 5 1];   % Minimum allowed values for the parameters
-%   inputs.PEsol.global_theta_guess=[ 
-%       3.75000000075784e-09
-%        0.00671302536054705
-%        0.00113424628516263
-%        0.00392299962038329
-%            25.000248018349]'; 
-%   inputs.PEsol.global_theta_max=2*inputs.PEsol.global_theta_guess;
-%   inputs.PEsol.global_theta_min=0.5*inputs.PEsol.global_theta_guess; 
+ inputs.PEsol.id_global_theta=char('alpha','vv','K','D','delta','delta2');                    %  'all'|User selected 
+ inputs.PEsol.global_theta_max=[1e-4 0.01 0.25 0.01 25 25];
+ inputs.PEsol.global_theta_min=[1e-8*ones(1,4) 1 1 ];   % Minimum allowed values for the parameters
+  inputs.PEsol.global_theta_guess=[ 
+   0.000008965839965
+   0.004159100680866
+   0.010156301735711
+   0.002088516184136
+   6.450699067022990
+  39.085748536045536
+       ]'; 
+    inputs.PEsol.global_theta_max=2*inputs.PEsol.global_theta_guess;
+    inputs.PEsol.global_theta_min=0.5*inputs.PEsol.global_theta_guess; 
    
 %  for iexp=1:5
 %      inputs.PEsol.id_local_theta{iexp}=char('alpha','vv','K','D','delta');
@@ -125,10 +127,10 @@ inputs.nlpsol.nlpsolver='eSS';                        % [] NLP solver:
                                                        
 inputs.nlpsol.eSS.log_var = 1:4;    %The number of the parameters
 inputs.nlpsol.eSS.maxeval = 100000;
-inputs.nlpsol.eSS.maxtime = 300;
+inputs.nlpsol.eSS.maxtime = 600;
 
-inputs.nlpsol.eSS.local.solver = 'lsqnonlin';
-inputs.nlpsol.eSS.local.finish = 'fminsearch';
+inputs.nlpsol.eSS.local.solver = 0;
+inputs.nlpsol.eSS.local.finish = 'nomad';
 
 % inputs.nlpsol.multi_starts=500;                       % [] Number of different initial guesses to run local methods in the multistart approach
 % inputs.nlpsol.multistart.maxeval = 100000;            % Maximum number of function evaluations for the multistart
