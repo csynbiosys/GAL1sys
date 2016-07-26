@@ -38,9 +38,11 @@ plot(linspace(0,5*size(y,1),size(y,1)), ynormmean, 'sk')
 rootD = cd('/Users/tn/Documents/#Work_NCKU/Project_Menolascina_160712');
 rootD = cd; % Matlab returns the previous directory when changing directory
 exclude = {'Data4Identification.mat','GFquantification.mat','GFnd003SingleCellDataWE.mat','GFnd007SingleCellDataWE.mat','GFnd265SingleCellDataInit.mat','GFnd272SingleCellData.mat', 'nd265_data_sh.mat', 'nd272_data_sh.mat'}; %.mat file to exclude
+%exclude = {exclude{:}, 'nd032.mat', 'nd037.mat', 'nd039.mat', 'nd041.mat'}
 dataD = dir(rootD);
-DataS = struct('experimentName',[],'time_min',[],'time_input',[],'NrCells',[],'input',[],'output',[],'output_std',[],'output_pred',[],'inputRawNormalised',[],'outputRawNormalised',[],'inputRawFlourescence',[],'outputRawFlourescence',[],'RFP',[]);
+DataS = struct('experimentName',[],'loadedDir','','time_min',[],'time_input',[],'NrCells',[],'input',[],'output',[],'output_std',[],'output_pred',[],'inputRawNormalised',[],'outputRawNormalised',[],'inputRawFlourescence',[],'outputRawFlourescence',[],'RFP',[]);
 S = struct('description','','rootDir','','loadedDir','','Data',DataS);
+tol = 10^-9;
 S(1).rootDir = rootD;
 if exist('description.txt','file')
     fileID = fopen('description.txt'); Temp = '';
@@ -80,28 +82,38 @@ for i = 3:size(dataD,1);
                 % Checks if an experiment with the same number in the
                 % file name has been read before. If it has, then the
                 % info is added to that entry.
-                for j = 1:numel(S(1).Data),
-                    if ~isempty(S(1).Data(j).experimentName) && strcmp(lower(S(1).Data(j).experimentName(end-4:end)), lower(dataDM(k).name(end-8:end-4))),
+                for j = numel(S(1).Data):-1:1,
+                    if ~isempty(S(1).Data(j).experimentName) && strcmp(S(1).Data(j).loadedDir, dataD(i).name) && strcmp(lower(dataDM(k).name(1:4)), 'data') && strcmp(lower(S(1).Data(j).experimentName(end-4:end)), lower(dataDM(k).name(end-8:end-4))),
                         % If the last five letters are the same then the
                         % number is the same.
                         countExp = j;
                         break
                     end
                 end
+                disp(['Loading ' dataD(i).name '/' dataDM(k).name(1:end-4) ' with (i,j,k): ' num2str([i j k]) ' placing data in ' num2str(countExp) ','])
+                if numel(S(1).Data) >= countExp && ~isempty(S(1).Data(countExp).experimentName),
+                    disp(['which since before contains ' S(1).Data(countExp).loadedDir '/' S(1).Data(countExp).experimentName])
+                end
                 % Adds data to the Cell with number countExp        
                 if numel(S(1).Data) < countExp,
                     S(1).Data(countExp).experimentName = dataDM(k).name(1:end-4); %Initiates new matrix
+                    S(1).Data(countExp).loadedDir = dataD(i).name;
                 end
                 DataLoaded = load([dataD(i).name '/' dataDM(k).name]);
                 fieldnamesDL = fieldnames(DataLoaded);
                 allIdentical = true;
                 for l = 1:numel(fieldnamesDL),
+                    %disp([num2str(l) ' ' fieldnamesDL{l}])
                     switch (fieldnamesDL{l}),
                         case 'u'
                             if isempty(S(1).Data(countExp).input),
                                 S(1).Data(countExp).input = DataLoaded.u';
                             else
-                                differ = norm(S(1).Data(countExp).input - DataLoaded.u');
+                                if numel(S(1).Data(countExp).input) == numel(DataLoaded.u'),
+                                    differ = norm(S(1).Data(countExp).input - DataLoaded.u');
+                                else
+                                    differ = inf;
+                                end
                                 if differ < tol,
                                     % All fine
                                 else
@@ -228,12 +240,11 @@ for i = 3:size(dataD,1);
                             end
                             
                         case 'ingresso'
-                            i,j,k,l
-                            S(1).Data
-                            countExp
                             if isempty(S(1).Data(countExp).input),
-                            disp('hej')
-                                S(1).Data(countExp).input = DataLoaded.ingresso';
+                                S(1).Data(countExp).input = [ones(DataLoaded.inittime*60,1); DataLoaded.ingresso'];
+                                if ~isempty(S(1).Data(countExp).outputRawFlourescence) && numel(S(1).Data(countExp).input) ~= 5*size(S(1).Data(countExp).outputRawFlourescence,1),
+                                    warning(['The input has the wrong number of elements: ' num2str([numel(S(1).Data(countExp).input) 5*size(S(1).Data(countExp).outputRawFlourescence,1)])]);
+                                end
                                 if ~isempty(S(1).Data(countExp).input) && isempty(S(1).Data(countExp).time_input),
                                     if ~isempty(S(1).Data(countExp).time_min),
                                         if numel(S(1).Data(countExp).input) ~= numel(S(1).Data(countExp).time_min),
@@ -244,7 +255,6 @@ for i = 3:size(dataD,1);
                                     end
                                 end
                             else
-                            disp('hej2')
                                 differ = norm(S(1).Data(countExp).input - DataLoaded.ingresso');
                                 if differ < tol,
                                     % All fine
@@ -261,14 +271,19 @@ for i = 3:size(dataD,1);
                 else
                     error('At least one confliciting variable detected.')
                 end
+                disp(['Fixing time vectors. OutputRawFlourescence contains ' num2str(size(S(1).Data(countExp).outputRawFlourescence)) ' elements.'])
                 if ~isempty(S(1).Data(countExp).outputRawFlourescence),
                     S(1).Data(countExp).time_min = linspace(0,5*size(S(1).Data(countExp).outputRawFlourescence,1),size(S(1).Data(countExp).outputRawFlourescence,1))';
                     if ~isempty(S(1).Data(countExp).input) && isempty(S(1).Data(countExp).time_input),
+                        disp(['input contains ' num2str(size(S(1).Data(countExp).input)) ' elements.'])
                         if numel(S(1).Data(countExp).input) ~= numel(S(1).Data(countExp).time_min),
-                            S(1).Data(countExp).time_input = linspace(0,5*size(S(1).Data(countExp).outputRawFlourescence,1),5*60*size(S(1).Data(countExp).outputRawFlourescence,1))';
+                            S(1).Data(countExp).time_input = linspace(0,5*size(S(1).Data(countExp).outputRawFlourescence,1),size(S(1).Data(countExp).input,1))';
                         else
                             S(1).Data(countExp).time_input = S(1).Data(countExp).time_min;
                         end
+                    elseif ~isempty(S(1).Data(countExp).input) && ~isempty(S(1).Data(countExp).time_input),
+                        disp(['input contains ' num2str(size(S(1).Data(countExp).input)) ' elements.'])
+                        disp(['time_input contains ' num2str(size(S(1).Data(countExp).time_input)) ' elements.'])
                     end
                     S(1).Data(countExp).NrCells = size(S(1).Data(countExp).outputRawFlourescence,2);
                     if S(1).Data(countExp).NrCells == 1,
@@ -293,7 +308,15 @@ for i = 3:size(dataD,1);
         end
     end
 end
-clear i k l rootD fileID fieldnamesDL DataS dataDM dataD DataLoaded countExp T Temp exclude
+clear i j k l rootD fileID fieldnamesDL DataS dataDM dataD DataLoaded countExp T Temp exclude allIdentical tol
+
+% Change order of the experiments so Filippo partial comes last.
+Temp = S.Data(end-7:end-4);
+S.Data(end-7:end-4) = [];
+S.Data(end+1:end+4) = Temp; clear Temp;
+
+% Remove the one missing input
+%S.Data(11)=[];
 
 %% Log_Menolascina_data.m 160713-4. Listing of loaded data
 % Assume that S containing all data exist
@@ -307,34 +330,39 @@ end
 %% Log_Menolascina_data.m 160713-5. Normalisation and calculation of mean and std for all data
 
 for i = 1:size(S.Data,2),
-
+    clear tGalend
     if isempty(S.Data(i).output),
+        disp(['Fixing ' S.Data(i).loadedDir '/' S.Data(i).experimentName ' with (i): ' num2str([i])])
         figure(i), hold on
         xlabel('Time (min)')
         % Find the index at which the initial Galactose period ends
-        if ~isempty(S.Data(i).input),
+        if ~isempty(S.Data(i).input) && S.Data(i).input(1) > 0,
             plot(S.Data(i).time_input,S.Data(i).input,'r');
-            ind = find(S.Data(i).input < 0.9*S.Data(i).input(1)) - 1;
+            ind = find(S.Data(i).input < 0.9*max(S.Data(i).input)) - 1;
             tGalend = floor(S.Data(i).time_input(ind(1)));
             plot([tGalend, tGalend],[max(S.Data(i).input), min(S.Data(i).input)], 'ro')
+        elseif S.Data(i).input(1) <= 0,
+            warning('The first input is zero or negative.')
         end
 
-        % Calculate the mean over all cells for each timepoint
-        ymean = meanNaN(S.Data(i).outputRawFlourescence,2);
+        if exist('tGalend','var')
+            % Calculate the mean over all cells for each timepoint
+            ymean = meanNaN(S.Data(i).outputRawFlourescence,2);
 
-        % Calculate the mean over the Galactose period
-        ymeanGal = meanNaN(ymean(1:floor(tGalend/5)))
+            % Calculate the mean over the Galactose period
+            ymeanGal = meanNaN(ymean(1:floor(tGalend/5)))
 
-        % Normalise the arbitrary florescence readings such that the mean of mean
-        % of the initial Galactose period is defind as 1
-        S.Data(i).outputRawNormalised = S.Data(i).outputRawFlourescence./ymeanGal; 
-        S.Data(i).output = ymean./ymeanGal;
+            % Normalise the arbitrary florescence readings such that the mean of mean
+            % of the initial Galactose period is defind as 1
+            S.Data(i).outputRawNormalised = S.Data(i).outputRawFlourescence./ymeanGal; 
+            S.Data(i).output = ymean./ymeanGal;
 
-        plot(S.Data(i).time_min, S.Data(i).outputRawNormalised)
-        plot(S.Data(i).time_min, S.Data(i).output, 'sg')
-        
-        % Calculate the std over all cells for each timeperiod
-        S.Data(i).output_std = std(S.Data(i).outputRawNormalised,0,2,'omitnan');
+            plot(S.Data(i).time_min, S.Data(i).outputRawNormalised)
+            plot(S.Data(i).time_min, S.Data(i).output, 'sg')
+
+            % Calculate the std over all cells for each timeperiod
+            S.Data(i).output_std = std(S.Data(i).outputRawNormalised,0,2,'omitnan');
+        end
     end
 
 end
@@ -369,6 +397,7 @@ end
 
 
 plotCells = false; % Plot the output trajectory of every cell
+plotErr = false; % Plot the errorbars as a shaded area 
 plotErr = true; % Plot the errorbars as a shaded area 
 
 S
@@ -378,6 +407,7 @@ for i = 1:size(S.Data,2),
     S.Data(i)
     figure(i), hold on
     xlabel('Time (min)')
+    title([S.Data(i).loadedDir '/' S.Data(i).experimentName ' with (i): ' num2str(i)])
     % Find the index at which the initial Galactose period ends
     if ~isempty(S.Data(i).input),
         hind = hind + 1; hlabel{hind} = 'Input';
