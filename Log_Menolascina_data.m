@@ -35,7 +35,8 @@ plot(linspace(0,5*size(y,1),size(y,1)), ynormmean, 'sk')
 
 % Go to the root directory of the data, e.g. './', or
 % modify the following variable.
-rootD = cd('/Users/tn/Documents/#Work_NCKU/Project_Menolascina_160712');
+%rootD = cd('/Users/tn/Documents/#Work_NCKU/Project_Menolascina_160712');
+rootD = cd('/Users/tn/Documents/Dropbox/Share_with_Filippo_Menolascina');
 rootD = cd; % Matlab returns the previous directory when changing directory
 exclude = {'Data4Identification.mat','GFquantification.mat','GFnd003SingleCellDataWE.mat','GFnd007SingleCellDataWE.mat','GFnd265SingleCellDataInit.mat','GFnd272SingleCellData.mat', 'nd265_data_sh.mat', 'nd272_data_sh.mat'}; %.mat file to exclude
 %exclude = {exclude{:}, 'nd032.mat', 'nd037.mat', 'nd039.mat', 'nd041.mat'}
