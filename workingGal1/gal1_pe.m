@@ -2,51 +2,59 @@
 % PATHS RELATED DATA
 %======================
 
-inputs.pathd.results_folder='gal1_test';         % Folder to keep results (in Results) for a given problem          
-inputs.pathd.short_name='gal1';                      % To identify figures and reports for a given problem   
+inputs.pathd.results_folder= 'gal1_test';            % Folder to keep results (in Results) for a given problem          
+inputs.pathd.short_name= 'gal1';                     % To identify figures and reports for a given problem   
 
 %======================
 % MODEL RELATED DATA
 %======================
 
-inputs.model.input_model_type='blackboxmodel';                % Model introduction: 'charmodelC'|'c_model'|'charmodelM'|'matlabmodel'|'sbmlmodel'|                        
-                                                           %                     'blackboxmodel'|'blackboxcost                             
-inputs.model.blackboxmodel_file='gal1bbmodelF'; % File including the simulation of the given model
-inputs.model.n_st=1;
-inputs.model.n_par=8;
-inputs.model.n_stimulus=1;
-inputs.model.names_type='custom';
+inputs.model.input_model_type= 'blackboxmodel';      % Model introduction: 'charmodelC'|'c_model'|'charmodelM'|'matlabmodel'|'sbmlmodel'|'blackboxmodel'|'blackboxcost                             
+inputs.model.blackboxmodel_file= 'gal1bbmodelF';     % File including the simulation of the given model
+inputs.model.n_st= 1;
+inputs.model.n_par= 8;
+inputs.model.n_stimulus= 1;
+inputs.model.names_type= 'custom';
 
-inputs.model.st_names=char('Gal1');     % Names of the states
-inputs.model.par_names=char('alpha','vv','H','K','D','IC','delta','delta2');             % Names of the parameters defining parameter order
-inputs.model.stimulus_names=char('galactose');
-inputs.model.par=[0.00175985449291231,0.0800887345690361,2.22548971250921,3.35948035905386,0.0100614569676223,1.90860267661432,72.1324389675838,10];
+% Note: you can select any customised name but
+% n, t, u, v, y, ydot, par, tlast, told, pend 
+% which are reserved words
+inputs.model.st_names= char('Gal1');                                             % Names of the states
+inputs.model.par_names= char('alpha','vv','H','K','D','IC','delta','delta2');    % Names of the parameters defining parameter order
+inputs.model.stimulus_names= char('galactose');
+inputs.model.par= [0.00175985449291231,0.0800887345690361,2.22548971250921,3.35948035905386,0.0100614569676223,1.90860267661432,72.1324389675838,10];
 
 %==================================
 % EXPERIMENTAL SCHEME RELATED DATA
 %==================================
 
-load Data_Menolascina_yeast_160718.mat
+% LOAD EXPERIMENTAL DATA
+Datadir= uigetdir('','Select the folder containing the data');
+DataFile= 'Data_Menolascina_yeast_160718.mat';
+load(strcat(Datadir,'/',DataFile));
 
-inputs.exps.n_exp=5;                                  %Number of experiments                                                                            
-for iexp=1:inputs.exps.n_exp
-    index=iexp;
-    %index=4;
-    inputs.exps.exp_y0{iexp}=ones(1,inputs.model.n_st);  %Initial conditions for each experiment
-    inputs.exps.t_f{iexp}=S.Data(index).time_min(end);                            %Experiments duration
+inputs.exps.n_exp= size(S.Data,2);                              %Number of experiments                                                                            
+
+for iexp= 1:inputs.exps.n_exp
+    index= iexp;
+    % INITIAL CONDITIONS AND DURATION DEFINITION
+    inputs.exps.exp_y0{iexp}= ones(1,inputs.model.n_st);        %Initial conditions for each experiment
+    inputs.exps.t_f{iexp}= S.Data(index).time_min(end);         %Experiment duration
     
-    % OBSEVABLES DEFINITION
-    inputs.exps.n_obs{iexp}=1;                            % Number of observed quantities per experiment
-    inputs.exps.obs_names{iexp}=char('GFP');      % Name of the observed quantities per experiment
-    inputs.exps.obs{iexp}=char('GFP=Gal1');   % Observation function
+    % OBSERVABLES DEFINITION
+    inputs.exps.n_obs{iexp}= size(S.Data(index).output,2);      % Number of observed quantities per experiment
+    inputs.exps.obs_names{iexp}=char('GFP');                    % Name of the observed quantities per experiment
+    inputs.exps.obs{iexp}=char('GFP=Gal1');                     % Observation function
     
-    inputs.exps.u_interp{iexp}='step';                  %Stimuli definition for experiment 1:
-    %OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down'
-    t_con{iexp}=[0 S.Data(index).time_input'];                         % Input swithching times: Initial and final time
-    u{iexp}= S.Data(index).input';                                 % Values of the inputs
-    inputs.exps.exp_data{iexp}=S.Data(index).output;
-    inputs.exps.error_data{iexp}=S.Data(index).output_std;
-    inputs.exps.t_s{iexp}=S.Data(index).time_min';
+    inputs.exps.u_interp{iexp}='step';                          % Stimuli definition for the current experiment
+                                                                % OPTIONS:u_interp: 'sustained' |'step'|'linear'(default)|'pulse-up'|'pulse-down'
+    t_con{iexp}=[0 S.Data(index).time_input'];                  % Input swithching times: Initial and final time
+    u{iexp}= S.Data(index).input';                              % Values of the inputs
+    
+    inputs.exps.t_s{iexp}=S.Data(index).time_min';              % Sampling time for the output
+    inputs.exps.exp_data{iexp}=S.Data(index).output;            % Values of the outputs
+    inputs.exps.error_data{iexp}=S.Data(index).output_std;      % Errors of the outputs
+
     
     
     % TRANSFORM INPUT VECTORS FOR MINIMUM DIMENSIONS
