@@ -5,11 +5,11 @@
 
 % Go to the root directory of the data, e.g. './', or
 % modify the following variable.
-savefigurepath = '/Users/tn/Documents/Dropbox/NordlingLab_SystemsSyntheticBiology/Figures_Data_reproduction_161106';
-%savefigurepath = '/home/chiching/Dropbox/NCKU/2016/SB/Reproduction/';
+%savefigurepath = '/Users/tn/Documents/Dropbox/NordlingLab_SystemsSyntheticBiology/Figures_Data_reproduction_161106';
+savefigurepath = '/home/chiching/Dropbox/NordlingLab_SystemsSyntheticBiology/Figures_Data_reproduction_161106/';
 %rootD = cd('/Users/tn/Documents/#Work_NCKU/Project_Menolascina_160712');
-rootD = cd('/Users/tn/Documents/Dropbox/Share_with_Filippo_Menolascina');
-%rootD = cd('/home/chiching/Dropbox/Share_with_Filippo_Menolascina');
+%rootD = cd('/Users/tn/Documents/Dropbox/Share_with_Filippo_Menolascina');
+rootD = cd('/home/chiching/Dropbox/Share_with_Filippo_Menolascina');
 rootD = cd; % Matlab returns the previous directory when changing directory
 exclude = {'Data4Identification.mat','GFquantification.mat','GFnd003SingleCellDataWE.mat','GFnd007SingleCellDataWE.mat','GFnd265SingleCellDataInit.mat','GFnd272SingleCellData.mat', 'nd265_data_sh.mat', 'nd272_data_sh.mat'}; %.mat file to exclude
 %exclude = {exclude{:}, 'nd032.mat', 'nd037.mat', 'nd039.mat', 'nd041.mat'}
@@ -357,33 +357,33 @@ subplot(2,1,1)
 line([-180 0],[1.0,1.0],'Color','b','LineWidth',2)
 line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
 hold on
-plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
+plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',2);
 grid on
 xlabel('Time (min)')
 ylim([0 1.2])
 xlim([-180 1000])
-title('F 2016 Figure 4C nd032 (i=16)')
+title('F 2016 Figure 4C nd032 (16)')
 saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4C-2.jpg'))
 
 
 i=19;
 figure('position', fig_position)
 subplot(2,1,2) 
-plot(S.Data(i).time_input-70,S.Data(i).input,'r','LineWidth',3);
+plot(S.Data(i).time_input-60,S.Data(i).input,'r','LineWidth',3);
 grid on
 xlabel('Time (min)')
 xlim([-180 1000])
 %plot output
 subplot(2,1,1) 
-line([-70 0],[1.0,1.0],'Color','b','LineWidth',2)
+line([-60 0],[1.0,1.0],'Color','b','LineWidth',2)
 line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
 hold on
-plot(S.Data(i).time_min-70,S.Data(i).output,'g','LineWidth',3);
+plot(S.Data(i).time_min-60,S.Data(i).output,'g','LineWidth',2);
 grid on
 xlabel('Time (min)')
 ylim([0 1.2])
 xlim([-180 1000])
-title('F 2016 Figure 4B nd041 (i=19)')
+title('F 2016 Figure 4B nd041 (19)')
 saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4B-2.jpg'))
 
 for i = 2:7,
@@ -401,39 +401,39 @@ for i = 2:7,
         line([-180 0],[1.0,1.0],'Color','b','LineWidth',2)
         line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',2);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
         xlim([-180 1000])
         if i ==7,
-            title('F 2016 Figure 4A')
+            title('F 2016 Figure 4A ND043 (7)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4A.jpg'))
         elseif i ==2,
-            title('F 2016 Figure 4C')
+            title('F 2016 Figure 4C ND032 (2)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4C.jpg'))
         end    
             
     elseif i == 5,
         figure('position', fig_position)
         subplot(2,1,2) 
-        plot(S.Data(i).time_input-70,S.Data(i).input,'r','LineWidth',3);
+        plot(S.Data(i).time_input-60,S.Data(i).input,'r','LineWidth',3);
         grid on
         xlabel('Time (min)')
-        xlim([-70 1000])
+        xlim([-180 1000])
 
         
         %plot output
         subplot(2,1,1) 
-        line([-70 0],[1.0,1.0],'Color','b','LineWidth',2)
+        line([-60 0],[1.0,1.0],'Color','b','LineWidth',2)
         line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min-70,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-60,S.Data(i).output,'g','LineWidth',2);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
-        xlim([-70 1000])
-        title('F 2016 Figure 4B')  
+        xlim([-180 1000])
+        title('F 2016 Figure 4B ND041 (5)')  
         saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4B.jpg'))
     end
 end
@@ -441,12 +441,15 @@ end
 %% Plot F_2016_Figure6
 %
 %
+
+fig_position = [0,0,700,300];
+
 for i = 17:18;
     %plot input
     %figure size
     figure('position', fig_position)
     subplot(2,1,2) 
-    plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
+    plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',2);
     grid on
     xlabel('Time (min)')
     xlim([-180 1500])
@@ -460,16 +463,16 @@ for i = 17:18;
     line([1000 1000],[0.5 0.25],'Color','b','LineWidth',2)
     line([1000 1500],[0.25,0.25],'Color','b','LineWidth',2)
     hold on
-    plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
+    plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',2);
     grid on
     xlabel('Time (min)')
     ylim([0 1.2])
     xlim([-180 1500])
         if i == 18,
-            title('F 2016 Figure 6C nd039 (i=18)')
+            title('F 2016 Figure 6C nd039 (18)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6C-2.jpg'))
         elseif i == 17,
-            title('F 2016 Figure 6A nd037 (i=17)')
+            title('F 2016 Figure 6A nd037 (17)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6A-2.jpg'))
         end
 end
@@ -481,7 +484,7 @@ for i = 3:6,
         %figure size
         figure('position', fig_position)
         subplot(2,1,2) 
-        plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
+        plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',2);
         grid on
         xlabel('Time (min)')
         xlim([-180 1500])
@@ -495,19 +498,19 @@ for i = 3:6,
         line([1000 1000],[0.5 0.25],'Color','b','LineWidth',2)
         line([1000 1500],[0.25,0.25],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',2);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
         xlim([-180 1500])
         if i ==3,
-            title('F 2016 Figure 6A')
+            title('F 2016 Figure 6A ND037 (3)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6A.jpg'))
         elseif i ==4,
-            title('F 2016 Figure 6C')
+            title('F 2016 Figure 6C ND039 (4)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6C.jpg'))
         elseif i ==6,
-            title('F 2016 Figure 6B')
+            title('F 2016 Figure 6B ND042 (6)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6B.jpg'))
         end 
     end
@@ -517,6 +520,8 @@ end
 %% Plot F_2016_Figure8
 %
 %
+fig_position = [0,0,650,250];
+
 for i = 8:11,
     if i == 8 || i == 9, 
         %plot input
@@ -533,16 +538,16 @@ for i = 8:11,
         line([-180 0],[1.0 1.0],'Color','b','LineWidth',2)
         line([0 1500],[1.0 0.25],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',2);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
         xlim([-180 1500])        
         if i ==8,
-            title('F 2016 Figure 8A')
+            title('F 2016 Figure 8A ND052 (8)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 8A.jpg'))
         elseif i ==9,
-            title('F 2016 Figure 8B')
+            title('F 2016 Figure 8B ND053 (9)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 8B.jpg'))
         end 
     elseif i== 10 || i == 11,
@@ -562,16 +567,16 @@ for i = 8:11,
         tt = 0:0.1:2100;
         plot(tt, 0.5+0.25.*sin(((2*pi/2000).*(tt-100))+pi/2),'b','LineWidth',2);
         hold on
-        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',2);
         grid on
         xlabel('Time (min)')
         ylim([0 1.1])
         xlim([-180 2100])
         if i ==10,
-            title('F 2016 Figure 8C')
+            title('F 2016 Figure 8C ND055 (10)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 8C.jpg'))
         elseif i ==11,
-            title('F 2016 Figure 8D')
+            title('F 2016 Figure 8D ND057 (11)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 8D.jpg'))
         end 
     end
@@ -599,17 +604,17 @@ for i = 12:15,
     ylim([0 1.3])
 
     if i ==13,
-        title('M 2014 Figure 5A')
+        title('M 2014 Figure 5A ND025 (13)')
         saveas(gcf,strcat(savefigurepath,'M 2014 Figure 5A.jpg'))
     elseif i ==12,
-        title('M 2014 Figure 5B')
+        title('M 2014 Figure 5B ND020 (12)')
         saveas(gcf,strcat(savefigurepath,'M 2014 Figure 5B.jpg'))
     elseif i ==14,
-        title('M 2014 Figure 5C')
+        title('M 2014 Figure 5C ND026 (14)')
         ylim auto
         saveas(gcf,strcat(savefigurepath,'M 2014 Figure 5C.jpg'))
     elseif i ==15,
-        title('M 2014 Figure 5D')
+        title('M 2014 Figure 5D ND028 (15)')
         saveas(gcf,strcat(savefigurepath,'M 2014 Figure 5D.jpg'))
     end 
     
