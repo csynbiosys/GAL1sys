@@ -293,7 +293,7 @@ S.Data(end+1:end+4) = Temp; clear Temp;
 %% Log_Menolascina_data.m 160713-5. Normalisation and calculation of mean and std for all data
 % i = 2 to 11 for F_2014
 %for i = 1:size(S.Data,2),
-for i = 16:19,
+for i = 2:19,
     clear tGalend
     if isempty(S.Data(i).output),
         disp(['Fixing ' S.Data(i).loadedDir '/' S.Data(i).experimentName ' with (i): ' num2str([i])])
@@ -347,42 +347,42 @@ fig_position = [0,0,650,250];
 i=16;
 figure('position', fig_position)
 subplot(2,1,2) 
-plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
 grid on
 xlabel('Time (min)')
-xlim([0 1180])
+xlim([-180 1000])
 %plot output
 subplot(2,1,1) 
-line([0 180],[1.0,1.0],'Color','b','LineWidth',2)
-line([180 1200],[0.5,0.5],'Color','b','LineWidth',2)
+line([-180 0],[1.0,1.0],'Color','b','LineWidth',2)
+line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
 hold on
-plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
 grid on
 xlabel('Time (min)')
 ylim([0 1.2])
-xlim([0 1180])
-title('F 2016 Figure 4C i=16')
+xlim([-180 1000])
+title('F 2016 Figure 4C nd032 (i=16)')
 saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4C-2.jpg'))
 
 
 i=19;
 figure('position', fig_position)
 subplot(2,1,2) 
-plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+plot(S.Data(i).time_input-70,S.Data(i).input,'r','LineWidth',3);
 grid on
 xlabel('Time (min)')
-xlim([0 1060])
+xlim([-70 1000])
 %plot output
 subplot(2,1,1) 
-line([0 70],[1.0,1.0],'Color','b','LineWidth',2)
-line([70 1060],[0.5,0.5],'Color','b','LineWidth',2)
+line([-70 0],[1.0,1.0],'Color','b','LineWidth',2)
+line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
 hold on
-plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+plot(S.Data(i).time_min-70,S.Data(i).output,'g','LineWidth',3);
 grid on
 xlabel('Time (min)')
 ylim([0 1.2])
-xlim([0 1060])
-title('F 2016 Figure 4B i=19')
+xlim([-70 1000])
+title('F 2016 Figure 4B nd041 (i=19)')
 saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4B-2.jpg'))
 
 for i = 2:7,
@@ -391,20 +391,20 @@ for i = 2:7,
         %figure size
         figure('position', fig_position)
         subplot(2,1,2) 
-        plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+        plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
         grid on
         xlabel('Time (min)')
-        xlim([0 1180])
+        xlim([-180 1000])
         %plot output
         subplot(2,1,1) 
-        line([0 180],[1.0,1.0],'Color','b','LineWidth',2)
-        line([180 1200],[0.5,0.5],'Color','b','LineWidth',2)
+        line([-180 0],[1.0,1.0],'Color','b','LineWidth',2)
+        line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
-        xlim([0 1180])
+        xlim([-180 1000])
         if i ==7,
             title('F 2016 Figure 4A')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4A.jpg'))
@@ -416,22 +416,22 @@ for i = 2:7,
     elseif i == 5,
         figure('position', fig_position)
         subplot(2,1,2) 
-        plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+        plot(S.Data(i).time_input-70,S.Data(i).input,'r','LineWidth',3);
         grid on
         xlabel('Time (min)')
-        xlim([0 1070])
+        xlim([-70 1000])
 
         
         %plot output
         subplot(2,1,1) 
-        line([0 70],[1.0,1.0],'Color','b','LineWidth',2)
-        line([70 1070],[0.5,0.5],'Color','b','LineWidth',2)
+        line([-70 0],[1.0,1.0],'Color','b','LineWidth',2)
+        line([0 1000],[0.5,0.5],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-70,S.Data(i).output,'g','LineWidth',3);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
-        xlim([0 1070])
+        xlim([-70 1000])
         title('F 2016 Figure 4B')  
         saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4B.jpg'))
     end
@@ -445,45 +445,33 @@ for i = 17:18;
     %figure size
     figure('position', fig_position)
     subplot(2,1,2) 
-    plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+    plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
     grid on
     xlabel('Time (min)')
-    xlim([0 1585])
+    xlim([-180 1500])
 
     %plot output
     subplot(2,1,1) 
-    line([0 85],[1.0,1.0],'Color','b','LineWidth',2)
-    line([85 85],[1.0 0.75],'Color','b','LineWidth',2)
-    line([85 585],[0.75,0.75],'Color','b','LineWidth',2)
-    line([585 585],[0.75 0.5],'Color','b','LineWidth',2)
-    line([585 1085],[0.5,0.5],'Color','b','LineWidth',2)
-    line([1085 1085],[0.5 0.25],'Color','b','LineWidth',2)
-    line([1085 1585],[0.25,0.25],'Color','b','LineWidth',2)
+    line([-180 0],[1.0,1.0],'Color','b','LineWidth',2)
+    line([0 500],[0.75,0.75],'Color','b','LineWidth',2)
+    line([500 500],[0.75 0.5],'Color','b','LineWidth',2)
+    line([500 1000],[0.5,0.5],'Color','b','LineWidth',2)
+    line([1000 1000],[0.5 0.25],'Color','b','LineWidth',2)
+    line([1000 1500],[0.25,0.25],'Color','b','LineWidth',2)
     hold on
-    plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+    plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
     grid on
     xlabel('Time (min)')
     ylim([0 1.2])
-    xlim([0 1585])
+    xlim([-180 1500])
         if i == 18,
-            title('F 2016 Figure 6C i=18')
+            title('F 2016 Figure 6C nd039 (i=18)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6C-2.jpg'))
         elseif i == 17,
-            title('F 2016 Figure 6A i=17')
+            title('F 2016 Figure 6A nd037 (i=17)')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6A-2.jpg'))
         end
 end
-
-if i ==3,
-    title('F 2016 Figure 6A')
-    saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6A.jpg'))
-elseif i ==4,
-    title('F 2016 Figure 6C')
-    saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6C.jpg'))
-elseif i ==6,
-    title('F 2016 Figure 6B')
-    saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6B.jpg'))
-end 
 
 
 for i = 3:6,
@@ -492,26 +480,25 @@ for i = 3:6,
         %figure size
         figure('position', fig_position)
         subplot(2,1,2) 
-        plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+        plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
         grid on
         xlabel('Time (min)')
-        xlim([0 1585])
+        xlim([-180 1500])
 
         %plot output
         subplot(2,1,1) 
-        line([0 85],[1.0,1.0],'Color','b','LineWidth',2)
-        line([85 85],[1.0 0.75],'Color','b','LineWidth',2)
-        line([85 585],[0.75,0.75],'Color','b','LineWidth',2)
-        line([585 585],[0.75 0.5],'Color','b','LineWidth',2)
-        line([585 1085],[0.5,0.5],'Color','b','LineWidth',2)
-        line([1085 1085],[0.5 0.25],'Color','b','LineWidth',2)
-        line([1085 1585],[0.25,0.25],'Color','b','LineWidth',2)
+        line([-180 0],[1.0,1.0],'Color','b','LineWidth',2)
+        line([0 500],[0.75,0.75],'Color','b','LineWidth',2)
+        line([500 500],[0.75 0.5],'Color','b','LineWidth',2)
+        line([500 1000],[0.5,0.5],'Color','b','LineWidth',2)
+        line([1000 1000],[0.5 0.25],'Color','b','LineWidth',2)
+        line([1000 1500],[0.25,0.25],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
-        xlim([0 1585])
+        xlim([-180 1500])
         if i ==3,
             title('F 2016 Figure 6A')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 6A.jpg'))
@@ -535,21 +522,21 @@ for i = 8:11,
         %figure size
         figure('position', fig_position)
         subplot(2,1,2) 
-        plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+        plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
         grid on
         xlabel('Time (min)')
-        xlim([0 1680])
+        xlim([-180 1500])
 
         %plot output
         subplot(2,1,1) 
-        line([0 180],[1.0 1.0],'Color','b','LineWidth',2)
-        line([180 1680],[1.0 0.25],'Color','b','LineWidth',2)
+        line([-180 0],[1.0 1.0],'Color','b','LineWidth',2)
+        line([0 1500],[1.0 0.25],'Color','b','LineWidth',2)
         hold on
-        plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
         grid on
         xlabel('Time (min)')
         ylim([0 1.2])
-        xlim([0 1680])        
+        xlim([-180 1500])        
         if i ==8,
             title('F 2016 Figure 8A')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 8A.jpg'))
@@ -562,23 +549,23 @@ for i = 8:11,
         %figure size
         figure('position', fig_position)
         subplot(2,1,2) 
-        plot(S.Data(i).time_input,S.Data(i).input,'r','LineWidth',3);
+        plot(S.Data(i).time_input-180,S.Data(i).input,'r','LineWidth',3);
         grid on
         xlabel('Time (min)')
-        xlim([0 2280])
+        xlim([-180 2100])
 
         %plot output
         subplot(2,1,1) 
-        line([0 180],[1.0 1.0],'Color','b','LineWidth',2)
+        line([-180 0],[1.0 1.0],'Color','b','LineWidth',2)
         hold on
-        tt = 180:0.1:2280;
-        plot(tt, 0.5+0.25.*sin(((2*pi/2000).*(tt-180-100))+pi/2),'b','LineWidth',2);
+        tt = 0:0.1:2100;
+        plot(tt, 0.5+0.25.*sin(((2*pi/2000).*(tt-100))+pi/2),'b','LineWidth',2);
         hold on
-        plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',3);
+        plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',3);
         grid on
         xlabel('Time (min)')
         ylim([0 1.1])
-        xlim([0 2280])
+        xlim([-180 2100])
         if i ==10,
             title('F 2016 Figure 8C')
             saveas(gcf,strcat(savefigurepath,'F 2016 Figure 8C.jpg'))
@@ -597,17 +584,17 @@ for i = 12:15,
     %figure size
     
     figure('position', [0,0,600,250])
-    line([0 180],[1.0,1.0],'Color','b','LineWidth',2)
-    line([180 2180],[0.5,0.5],'Color','b','LineWidth',2)
+    line([-180 0],[1.0,1.0],'Color','b','LineWidth',2)
+    line([0 2000],[0.5,0.5],'Color','b','LineWidth',2)
     hold on
-    plot(S.Data(i).time_input,S.Data(i).input*0.2,'r','LineWidth',1.5);
+    plot(S.Data(i).time_input-180,S.Data(i).input*0.2,'r','LineWidth',1.5);
     hold on
-    plot(S.Data(i).time_min,S.Data(i).output,'g','LineWidth',2.5);
+    plot(S.Data(i).time_min-180,S.Data(i).output,'g','LineWidth',2.5);
     hold on
 
     grid on
     xlabel('Time (min)')
-    xlim([0 2180])
+    xlim([-180 2000])
     ylim([0 1.3])
 
     if i ==13,
