@@ -330,7 +330,7 @@ end
 
 %% Log_Menolascina_data.m 160713-5. Normalisation and calculation of mean and std for all data
 
-for i = 1:size(S.Data,2),
+for i = 1:2;size(S.Data,2),
     clear tGalend
     if isempty(S.Data(i).output),
         disp(['Fixing ' S.Data(i).loadedDir '/' S.Data(i).experimentName ' with (i): ' num2str([i])])

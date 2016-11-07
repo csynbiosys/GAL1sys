@@ -5,9 +5,11 @@
 
 % Go to the root directory of the data, e.g. './', or
 % modify the following variable.
+savefigurepath = '/Users/tn/Documents/Dropbox/NordlingLab_SystemsSyntheticBiology/Figures_Data_reproduction_161106';
+%savefigurepath = '/home/chiching/Dropbox/NCKU/2016/SB/Reproduction/';
 %rootD = cd('/Users/tn/Documents/#Work_NCKU/Project_Menolascina_160712');
-%rootD = cd('/Users/tn/Documents/Dropbox/Share_with_Filippo_Menolascina');
-rootD = cd('/home/chiching/Dropbox/Share_with_Filippo_Menolascina');
+rootD = cd('/Users/tn/Documents/Dropbox/Share_with_Filippo_Menolascina');
+%rootD = cd('/home/chiching/Dropbox/Share_with_Filippo_Menolascina');
 rootD = cd; % Matlab returns the previous directory when changing directory
 exclude = {'Data4Identification.mat','GFquantification.mat','GFnd003SingleCellDataWE.mat','GFnd007SingleCellDataWE.mat','GFnd265SingleCellDataInit.mat','GFnd272SingleCellData.mat', 'nd265_data_sh.mat', 'nd272_data_sh.mat'}; %.mat file to exclude
 %exclude = {exclude{:}, 'nd032.mat', 'nd037.mat', 'nd039.mat', 'nd041.mat'}
@@ -334,7 +336,6 @@ for i = 2:19,
     end
 
 end
-savefigurepath = '/home/chiching/Dropbox/NCKU/2016/SB/Reproduction/';
 
 %save Data_Menolascina_yeast_160718.mat S
 
@@ -371,7 +372,7 @@ subplot(2,1,2)
 plot(S.Data(i).time_input-70,S.Data(i).input,'r','LineWidth',3);
 grid on
 xlabel('Time (min)')
-xlim([-70 1000])
+xlim([-180 1000])
 %plot output
 subplot(2,1,1) 
 line([-70 0],[1.0,1.0],'Color','b','LineWidth',2)
@@ -381,7 +382,7 @@ plot(S.Data(i).time_min-70,S.Data(i).output,'g','LineWidth',3);
 grid on
 xlabel('Time (min)')
 ylim([0 1.2])
-xlim([-70 1000])
+xlim([-180 1000])
 title('F 2016 Figure 4B nd041 (i=19)')
 saveas(gcf,strcat(savefigurepath,'F 2016 Figure 4B-2.jpg'))
 
